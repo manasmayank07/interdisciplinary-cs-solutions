@@ -1,0 +1,49 @@
+import java.awt.Color;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+import java.io.File;
+import edu.princeton.cs.introcs.StdDraw;
+
+public class Histogram {
+    public static void main(String[] args) {
+        if (args.length != 1) {
+            System.out.println("Usage: java Histogram <image-file>");
+            return;
+        }
+
+        String filename = args[0];
+        int[] histogram = new int[256];
+
+        try {
+            BufferedImage image = ImageIO.read(new File(filename));
+            int width = image.getWidth();
+            int height = image.getHeight();
+
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    Color color = new Color(image.getRGB(x, y));
+                    int gray = (color.getRed() + color.getGreen() + color.getBlue()) / 3;
+                    histogram[gray]++;
+                }
+            }
+
+            int max = 0;
+            for (int i = 0; i < 256; i++) {
+                if (histogram[i] > max) {
+                    max = histogram[i];
+                }
+            }
+
+            StdDraw.setCanvasSize(512, 256);
+            StdDraw.setXscale(0, 256);
+            StdDraw.setYscale(0, max);
+
+            for (int i = 0; i < 256; i++) {
+                StdDraw.line(i, 0, i, histogram[i]);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+        }
+    }
+}
