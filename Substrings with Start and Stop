@@ -1,0 +1,32 @@
+public class Substrings {
+    public static void main(String[] args) {
+        if (args.length != 2) {
+            System.out.println("Usage: java Substrings <start> <stop>");
+            return;
+        }
+
+        String start = args[0];
+        String stop = args[1];
+        
+        String text = "abcSTARTmiddleSTOPabcSTARTagainSTOPabcSTARTSTOP"; // Example string
+
+        int pos = 0;
+        while (pos < text.length()) {
+            int startIndex = text.indexOf(start, pos);
+            if (startIndex == -1) break;
+
+            int stopIndex = text.indexOf(stop, startIndex + start.length());
+            if (stopIndex == -1) break;
+
+            String substring = text.substring(startIndex, stopIndex + stop.length());
+            
+            // Ensure there is no other start/stop inside
+            String middle = text.substring(startIndex + start.length(), stopIndex);
+            if (!middle.contains(start) && !middle.contains(stop)) {
+                System.out.println(substring);
+            }
+
+            pos = startIndex + 1;  // move forward to find overlapping substrings too
+        }
+    }
+}
